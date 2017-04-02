@@ -1,11 +1,12 @@
 import UIKit
 import PlaygroundSupport
 
-PlaygroundPage.current.liveView = AlgorithmContainerView()
+let algView = AlgorithmContainerView()
+PlaygroundPage.current.liveView = algView
 
 /*:
 # Sorting Made Easy
- In this playground you are going to learn about three of the most popular sorting algorithms in computer science: Bubble Sort, Insertion Sort, and Merge Sort. To accomplish this I've enlisted some help from _______Insert image im gonna use Here_________. We will show you an image of them and then sort them all by their heights from shortest to tallest. In these demos feel free to grab onto any elements in the list to move them around. This is a fully interactive lesson that allows you to move elements in the list before, during or after they are sorted. After you move them they will recalculate the sort and continue sorting. This way you can visualize how these lists are sorted when they are almost sorted, completely random, or in reverse order. Furthermore, you can adjust the slider located above face list to adjust the speed of the animations.
+ In this playground you are going to learn about three of the most popular sorting algorithms in computer science: Bubble Sort, Insertion Sort, and Merge Sort. To accomplish this I've enlisted some help from my close freinds and coworkers. Ive gathered some photos of to show you and then we will sort each person in the photo by their height from shortest to tallest. In these demos feel free to grab onto any elements in the list to move them around. This is a fully interactive lesson that allows you to move elements in the list before, during or after they are sorted. After you move them they will recalculate the sort and continue sorting. This way you can visualize how these lists are sorted when they are almost sorted, completely random, or in reverse order. Furthermore, you can adjust the slider located above face list to adjust the speed of the animations.
  */
 
 /*:

@@ -28,6 +28,10 @@ public class FaceButton: UIButton {
         
         faceImageView.contentMode = .scaleAspectFit
         
+        faceImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        faceImageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
+        
+        
         heightLabel.text = "\(200 - face.height)"
         heightLabel.textAlignment = .center
         heightLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightBold)

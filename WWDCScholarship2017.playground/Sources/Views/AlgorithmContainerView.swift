@@ -11,12 +11,12 @@ public class AlgorithmContainerView: UIView {
     public init() {
         
         
-        let anImage = UIImage(named: "siliconValley")!
+        let anImage = UIImage(named: "Group1")!
         sortView = SortingAlgorithmView(sortingAlg: bubbleSortAlg, faceList:  FacialDetection.getFaces(from: anImage))
         imgView = UIImageView(image: anImage)
         imgView.contentMode = .scaleAspectFit
         
-        super.init(frame: CGRect(x: 0, y: 0, width: 500, height: 900))
+        super.init(frame: CGRect(x: 0, y: 0, width: 500, height: 700))
         
         backgroundColor = Theme.blue
         
@@ -26,7 +26,13 @@ public class AlgorithmContainerView: UIView {
             button.addTarget(self, action: #selector(buttonPressed(withButton:)), for: .touchUpInside)
         }
         
-        stackView = LayoutHelper.fillEquallyInStackView([sortOptions, imgView, sortView] , axis: .vertical, distribution: .fillEqually, alignment: .fill, spacing: 0)
+        sortOptions.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        sortOptions.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
+        
+        sortView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        sortView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
+        
+        stackView = LayoutHelper.fillEquallyInStackView([sortOptions, imgView, sortView] , axis: .vertical, distribution: .fill, alignment: .fill, spacing: 0)
         addSubview(stackView)
         LayoutHelper.pinToSubview(stackView, to: self, constants: (0, -15, -15, 15))
     }
@@ -45,22 +51,25 @@ public class AlgorithmContainerView: UIView {
 
             if button.titleLabel?.text == bubbleSortAlg.name {
 
-                self.imgView.image = #imageLiteral(resourceName: "siliconValley.png")
+                self.imgView.image = UIImage(named: "Group1")!
                 self.sortView = SortingAlgorithmView(sortingAlg: bubbleSortAlg, faceList:  FacialDetection.getFaces(from: self.imgView.image!))
                 
 
             } else if button.titleLabel?.text == insertionSortAlg.name {
 
-                self.imgView.image = #imageLiteral(resourceName: "bigbangtheory.png")
+                self.imgView.image = UIImage(named: "Group3")!
                 self.sortView = SortingAlgorithmView(sortingAlg: insertionSortAlg, faceList:  FacialDetection.getFaces(from: self.imgView.image!))
 
             }  else if button.titleLabel?.text == mergeSortAlg.name {
 
-                self.imgView.image = #imageLiteral(resourceName: "MrRobot.png")
+                self.imgView.image = UIImage(named: "Group4")!
                 self.sortView = SortingAlgorithmView(sortingAlg: mergeSortAlg, faceList:  FacialDetection.getFaces(from: self.imgView.image!))
 
             }
 
+            self.sortView.heightAnchor.constraint(equalToConstant: 300).isActive = true
+            self.sortView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
+            
             self.stackView.addArrangedSubview(self.sortView)
             
         }

@@ -42,7 +42,6 @@ public class SortingAlgorithmView: UIView {
         isUserInteractionEnabled = true
         scrollView.isUserInteractionEnabled = true
         
-//        padding = (200.0 - (CGFloat(faceList.count) * buttonWidth)) / CGFloat(2.0)
         
         for i in 0..<faceList.count {
             
@@ -64,8 +63,6 @@ public class SortingAlgorithmView: UIView {
 
         slider.heightAnchor.constraint(equalToConstant: 20).isActive = true
         slider.widthAnchor.constraint(equalToConstant: 250).isActive = true
-//        slider.maximumValueImage = UIImage(named: "pauseIcon")!
-//        slider.minimumValueImage = UIImage(named: "pauseIcon")!
         slider.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
         
 
