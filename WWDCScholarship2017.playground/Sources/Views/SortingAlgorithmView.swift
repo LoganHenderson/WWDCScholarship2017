@@ -237,21 +237,7 @@ public class SortingAlgorithmView: UIView {
         case .mergeAnimationType:
             mergeAnimation(indexes: (animation.indxs.0, animation.indxs.1))
         }
-        
-//        // Fire the necessary animation
-//        if animation.name == .accessAnimationType {
-//            accessAnimation(indexes: animation.indxs.0 + animation.indxs.1)
-//        } else if animation.name == .swapAnimationType {
-//            swapAnimation(indexes: (animation.indxs.0.first!, animation.indxs.1.first!))
-//        } else if animation.name == .insertAnimationType {
-//            DispatchQueue.global(qos: .userInteractive).async {
-//                self.musicHelper.playSound(.insert)
-//            }
-//            insertAnimation(indexes: (animation.indxs.0.first!, animation.indxs.1.first!))
-//        } else if animation.name == .mergeAnimationType {
-//            mergeAnimation(indexes: (animation.indxs.0, animation.indxs.1))
-//        }
-        
+
         algAnimations.remove(at: 0)
     }
     
@@ -261,49 +247,34 @@ public class SortingAlgorithmView: UIView {
         DispatchQueue.global(qos: .userInteractive).async {
             self.musicHelper.playSound(.merge)
         }
-            var leftPile = indexes.0.sorted()
-            let rightPile = indexes.1.sorted()
-        
-            for x in 0..<rightPile.count {
-
-                
-                for y in stride(from: 0, through: leftPile.count - 1, by: 1) {
-                    
-                    
-                    if (faceButtons[rightPile[x]].face > faceButtons[leftPile[y]].face) {
-                        insertAnimation(indexes: (leftPile[y], rightPile[x]))
-                        leftPile.append(rightPile[x])
-                    }
+        var leftPile = indexes.0.sorted()
+        let rightPile = indexes.1.sorted()
+        for x in 0..<rightPile.count {
+            for y in stride(from: 0, through: leftPile.count - 1, by: 1) {
+                if (faceButtons[rightPile[x]].face > faceButtons[leftPile[y]].face) {
+                    insertAnimation(indexes: (leftPile[y], rightPile[x]))
+                    leftPile.append(rightPile[x])
                 }
             }
+        }
     }
     
     func swapAnimation(indexes: (Int, Int)) {
-        
         DispatchQueue.global(qos: .userInteractive).async {
             self.musicHelper.playSound(.swap)
         }
-            let temp = faceButtons[indexes.0]
-            faceButtons[indexes.0] = faceButtons[indexes.1]
-            faceButtons[indexes.1] = temp
-        
-            UIView.animate(withDuration: animationDurationLength) {
-                let origin = self.faceButtons[indexes.0].frame.origin
-                self.faceButtons[indexes.0].frame.origin = self.faceButtons[indexes.1].frame.origin
-                self.faceButtons[indexes.1].frame.origin = origin
-            }
-    }
+        let temp = faceButtons[indexes.0]
+        faceButtons[indexes.0] = faceButtons[indexes.1]
+        faceButtons[indexes.1] = temp
     
-    func resetColor(timer: Timer) {
-        if let dict = timer.userInfo as? [String : [Int]] {
-            for indx in dict["indexes"]! {
-                faceButtons[indx].backgroundColor = UIColor.lightGray
-            }
+        UIView.animate(withDuration: animationDurationLength) {
+            let origin = self.faceButtons[indexes.0].frame.origin
+            self.faceButtons[indexes.0].frame.origin = self.faceButtons[indexes.1].frame.origin
+            self.faceButtons[indexes.1].frame.origin = origin
         }
     }
     
     func accessAnimation(indexes: [Int]) {
-
         DispatchQueue.global(qos: .userInteractive).async {
             self.musicHelper.playSound(.access)
         }
@@ -362,6 +333,15 @@ public class SortingAlgorithmView: UIView {
     }
 
     // MARK: Helper Methods
+    
+    func resetColor(timer: Timer) {
+        if let dict = timer.userInfo as? [String : [Int]] {
+            for indx in dict["indexes"]! {
+                faceButtons[indx].backgroundColor = UIColor.lightGray
+            }
+        }
+    }
+
     public func isSorted() -> Bool {
         for x in 1..<faceButtons.count {
             if faceButtons[x].face < faceButtons[x - 1].face { return false }
@@ -369,12 +349,10 @@ public class SortingAlgorithmView: UIView {
         return true
     }
     
-    // Used to reset index for faces (this is necessary to keep track of which indexes to animate in recursive sorting functions)
     func resetFaceIndexes() {
         for x in 0..<faceButtons.count { faceButtons[x].face.indexInList = x }
     }
 
-    // Required init
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
