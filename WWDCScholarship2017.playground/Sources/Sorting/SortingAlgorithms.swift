@@ -41,15 +41,11 @@ public extension SortingAlgorithmView {
     
     func merge(leftPile: [Face], rightPile: [Face]) -> [Face] {
         
-        print("merge alg : \(getIndexesFromFaceList(faces: leftPile)) and \(getIndexesFromFaceList(faces: rightPile))")
 
         var leftIndex = 0
         var rightIndex = 0
         var orderedPile = [Face]()
-        if orderedPile.capacity < leftPile.count + rightPile.count {
-            orderedPile.reserveCapacity(leftPile.count + rightPile.count)
-        }
-        
+
         while leftIndex < leftPile.count && rightIndex < rightPile.count {
             if leftPile[leftIndex] < rightPile[rightIndex] {
                 orderedPile.append(leftPile[leftIndex])
@@ -75,7 +71,6 @@ public extension SortingAlgorithmView {
             rightIndex += 1
         }
         
-        print("ordered pile : \(orderedPile)")
         return orderedPile
     }
 

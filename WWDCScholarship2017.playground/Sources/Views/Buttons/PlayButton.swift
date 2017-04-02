@@ -19,11 +19,11 @@ public class PlayButton: UIButton {
             
             switch sortState {
             case .playing:
-                setImage(UIImage(named: "pauseIcon")!, for: .normal)
+                setImage(UIImage(named: Constants.iconImages.PauseButtonImageName)!, for: .normal)
             case .paused:
-                setImage(UIImage(named: "playIcon")!, for: .normal)
+                setImage(UIImage(named: Constants.iconImages.PlayButtonImageName)!, for: .normal)
             case .finished:
-                setImage(UIImage(named: "refreshIcon")!, for: .normal)
+                setImage(UIImage(named: Constants.iconImages.ShuffleButtonImageName)!, for: .normal)
             }
         }
     }

@@ -3,11 +3,8 @@ import UIKit
 public class FaceButton: UIButton {
     
     public let face: Face
-    
     public let faceImageView: UIImageView
     public let heightLabel: UILabel
-    
-    var lastLocation:CGPoint = CGPoint(x: 0, y: 0)
     
     override public var description: String {
         return "\(face.height)"
@@ -27,15 +24,12 @@ public class FaceButton: UIButton {
         layer.cornerRadius = 5
         
         faceImageView.contentMode = .scaleAspectFit
-        
         faceImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         faceImageView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
-        
         
         heightLabel.text = "\(200 - face.height)"
         heightLabel.textAlignment = .center
         heightLabel.font = UIFont.systemFont(ofSize: 12, weight: UIFontWeightBold)
-
         
         let stackView = LayoutHelper.fillEquallyInStackView([faceImageView, heightLabel], axis: .vertical, distribution: .fillProportionally, alignment: .fill, spacing: 5)
         addSubview(stackView)

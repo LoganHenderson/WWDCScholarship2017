@@ -13,30 +13,31 @@ public enum SortedStateType {
 }
 
 public class SortLabel: UILabel {
-
+    
+    public var sortState: SortedStateType {
+        didSet {
+            switch sortState {
+            case .unsorted:
+                text = Constants.sortViewText.kUnsortedState
+                backgroundColor = UIColor.black
+            case .sorting:
+                text = Constants.sortViewText.kSortingState
+                backgroundColor = UIColor.blue
+            case .sorted:
+                text = Constants.sortViewText.kSortedState
+                backgroundColor = UIColor.green
+            }
+        }
+    }
+    
     public init() {
+        sortState = .unsorted
         super.init(frame: .zero)
         
         font = UIFont.systemFont(ofSize: 20, weight: UIFontWeightBlack)
         textAlignment = .center
         textColor = UIColor.white
     }
-    
-    func setLabelForState(state: SortedStateType) {
-        
-        switch state {
-        case .unsorted:
-            text = Constants.sortState.kUnsortedState
-            backgroundColor = UIColor.black
-        case .sorting:
-            text = Constants.sortState.kSortingState
-            backgroundColor = UIColor.blue
-        case .sorted:
-            text = Constants.sortState.kSortedState
-            backgroundColor = UIColor.green
-        }
-    }
-    
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

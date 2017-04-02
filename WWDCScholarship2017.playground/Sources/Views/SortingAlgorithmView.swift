@@ -23,26 +23,57 @@ public class SortingAlgorithmView: UIView {
         var faceList: [Face] = []
         for button in faceButtons { faceList.append(button.face) }
         sortFaces(faces: faceList)
-        sortedLabel.setLabelForState(state: .sorting)
+        sortedLabel.sortState = .sorting
         playButton.sortState = .playing
     }
     
+
     public init(sortingAlg: Algorithm, faceList: [Face]) {
         
         scrollView = UIScrollView()
         algorithm = sortingAlg
         sortedLabel = SortLabel()
         playButton = PlayButton()
+        
         super.init(frame: .zero)
         
-        scrollView.clipsToBounds = false
         clipsToBounds = true
         layer.cornerRadius = 35
         backgroundColor = UIColor(white: 1, alpha: 0.5)
         isUserInteractionEnabled = true
+        scrollView.clipsToBounds = false
         scrollView.isUserInteractionEnabled = true
         
+        createFaceButtons(with: faceList)
         
+        let slider = UISlider()
+        slider.setValue(Float(animationDurationLength), animated: false)
+        slider.addTarget(self, action: #selector(sliderDidChange(slider:)), for: .valueChanged)
+        slider.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        slider.widthAnchor.constraint(equalToConstant: 250).isActive = true // dont think is working
+        slider.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
+
+        let desclabel = DescriptionLabel(text: Constants.sortViewText.numberDescription)
+        desclabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        desclabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
+        
+        sortedLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        sortedLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
+        
+        playButton.addTarget(self, action: #selector(playButtonPressedUpInside), for: .touchUpInside)
+        playButton.sortState = .paused
+        scrollView.frame = CGRect(x: 0, y: 0, width: (faceList.count * Int(buttonWidth)), height: 200)
+
+        let middleStack = LayoutHelper.fillEquallyInStackView([playButton, scrollView], axis: .horizontal, distribution: .fill, alignment: .fill, spacing: 5)
+    
+        let algStack = LayoutHelper.fillEquallyInStackView([TitleLabel(sortingAlg: sortingAlg), slider, middleStack, desclabel, sortedLabel], axis: .vertical, distribution: .fillProportionally, alignment: .fill, spacing: 15)
+        addSubview(algStack)
+        LayoutHelper.pinToSubview(algStack, to: self)
+        
+        sortedLabel.sortState = .unsorted
+    }
+    
+    func createFaceButtons(with faceList: [Face]) {
         for i in 0..<faceList.count {
             
             let faceButton = FaceButton(face: faceList[i])
@@ -55,31 +86,6 @@ public class SortingAlgorithmView: UIView {
             scrollView.addSubview(faceButton)
             faceButtons.append(faceButton)
         }
-        
-        let slider = UISlider()
-        slider.setValue(Float(animationDurationLength), animated: false)
-        slider.addTarget(self, action: #selector(sliderDidChange(slider:)), for: .valueChanged)
-        
-
-        slider.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        slider.widthAnchor.constraint(equalToConstant: 250).isActive = true
-        slider.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
-        
-
-        sortedLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        sortedLabel.setContentHuggingPriority(UILayoutPriorityDefaultHigh, for: .vertical)
-        
-        playButton.addTarget(self, action: #selector(playButtonPressedUpInside), for: .touchUpInside)
-        playButton.sortState = .paused
-        scrollView.frame = CGRect(x: 0, y: 0, width: (faceList.count * Int(buttonWidth)), height: 200)
-
-        let middleStack = LayoutHelper.fillEquallyInStackView([playButton, scrollView], axis: .horizontal, distribution: .fill, alignment: .fill, spacing: 0)
-    
-        let algStack = LayoutHelper.fillEquallyInStackView([TitleLabel(sortingAlg: sortingAlg), slider, middleStack, sortedLabel], axis: .vertical, distribution: .fillProportionally, alignment: .fill, spacing: 5)
-        addSubview(algStack)
-        LayoutHelper.pinToSubview(algStack, to: self)
-        
-        sortedLabel.setLabelForState(state: .unsorted)
     }
     
     func sliderDidChange(slider: UISlider) {
@@ -98,20 +104,21 @@ public class SortingAlgorithmView: UIView {
                 
                 self.faceButtons[x].frame = CGRect(x: CGFloat(x) * buttonWidth, y: currentFrame.origin.y, width: currentFrame.width, height: currentFrame.height)
             }
-            self.sortedLabel.setLabelForState(state: .unsorted)
+            self.sortedLabel.sortState = .unsorted
             self.playButton.sortState = .paused
         })
     }
 
     public func playButtonPressedUpInside() {
+        
+        musicHelper.playSound(.button)
+        
         if playButton.sortState == .finished {
             shuffleFaces()
-            musicHelper.playSound(.merge)
 
         } else if playButton.sortState == .paused {
             
             sortFacesFromButtonList()
-            musicHelper.playSound(.button)
 
             
         } else if playButton.sortState == .playing {
@@ -119,9 +126,13 @@ public class SortingAlgorithmView: UIView {
             animationTimer?.invalidate()
             animationTimer = nil
             playButton.sortState = .paused
-            musicHelper.playSound(.button)
             
         }
+    }
+    
+    public func endAnimations() {
+        animationTimer?.invalidate()
+        animationTimer = nil
     }
     
     
@@ -129,8 +140,7 @@ public class SortingAlgorithmView: UIView {
         
         if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
             
-            animationTimer?.invalidate()
-            animationTimer = nil
+            endAnimations()
             
             if gestureRecognizer.state == .began {
                 lastLocation = CGPoint(x: gestureRecognizer.view!.center.x, y: gestureRecognizer.view!.center.y)
@@ -152,7 +162,7 @@ public class SortingAlgorithmView: UIView {
             
             if (oldIndex != newIndex) {
                 playButton.sortState = .paused
-                sortedLabel.setLabelForState(state: .unsorted)
+                sortedLabel.sortState = isSorted() ? .sorted : .unsorted
             }
             
             newIndex = (newIndex < 0) ? 0 :  newIndex
@@ -208,37 +218,44 @@ public class SortingAlgorithmView: UIView {
             if algAnimations.count == 0 {
                 animationTimer?.invalidate()
                 animationTimer = nil
-                sortedLabel.setLabelForState(state: .sorted)
+                sortedLabel.sortState = .sorted
                 playButton.sortState = .finished
             }
             return
         }
         
-        // Fire the necessary animation
-        if animation.name == .accessAnimationType {
-            
+        switch animation.name {
+        case .accessAnimationType:
             accessAnimation(indexes: animation.indxs.0 + animation.indxs.1)
-            
-        } else if animation.name == .swapAnimationType {
-            
+        case .swapAnimationType:
             swapAnimation(indexes: (animation.indxs.0.first!, animation.indxs.1.first!))
-
-        } else if animation.name == .insertAnimationType {
-            
+        case .insertAnimationType:
+            DispatchQueue.global(qos: .userInteractive).async {
+                self.musicHelper.playSound(.insert)
+            }
             insertAnimation(indexes: (animation.indxs.0.first!, animation.indxs.1.first!))
-
-        } else if animation.name == .mergeAnimationType {
-            
+        case .mergeAnimationType:
             mergeAnimation(indexes: (animation.indxs.0, animation.indxs.1))
-            
         }
+        
+//        // Fire the necessary animation
+//        if animation.name == .accessAnimationType {
+//            accessAnimation(indexes: animation.indxs.0 + animation.indxs.1)
+//        } else if animation.name == .swapAnimationType {
+//            swapAnimation(indexes: (animation.indxs.0.first!, animation.indxs.1.first!))
+//        } else if animation.name == .insertAnimationType {
+//            DispatchQueue.global(qos: .userInteractive).async {
+//                self.musicHelper.playSound(.insert)
+//            }
+//            insertAnimation(indexes: (animation.indxs.0.first!, animation.indxs.1.first!))
+//        } else if animation.name == .mergeAnimationType {
+//            mergeAnimation(indexes: (animation.indxs.0, animation.indxs.1))
+//        }
+        
         algAnimations.remove(at: 0)
     }
     
-    // Used to reset index for faces (this is necessary to keep track of which indexes to animate in recursive sorting functions)
-    func resetFaceIndexes() {
-        for x in 0..<faceButtons.count { faceButtons[x].face.indexInList = x }
-    }
+    // MARK: Animations
     
     func mergeAnimation(indexes: ([Int], [Int])) {
         DispatchQueue.global(qos: .userInteractive).async {
@@ -303,9 +320,6 @@ public class SortingAlgorithmView: UIView {
     }
     
     func insertAnimation(indexes: (Int, Int)) {
-        DispatchQueue.global(qos: .userInteractive).async {
-            self.musicHelper.playSound(.swap)
-        }
             UIView.animate(withDuration: animationDurationLength) {
                 
                 let positionToInsertIn = indexes.0
@@ -347,15 +361,28 @@ public class SortingAlgorithmView: UIView {
             }
     }
 
+    // MARK: Helper Methods
+    public func isSorted() -> Bool {
+        for x in 1..<faceButtons.count {
+            if faceButtons[x].face < faceButtons[x - 1].face { return false }
+        }
+        return true
+    }
+    
+    // Used to reset index for faces (this is necessary to keep track of which indexes to animate in recursive sorting functions)
+    func resetFaceIndexes() {
+        for x in 0..<faceButtons.count { faceButtons[x].face.indexInList = x }
+    }
 
+    // Required init
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
 
 extension Array
 {
+    
     /** Randomizes the order of an array's elements. */
     mutating func shuffle()
     {

@@ -17,10 +17,10 @@ public class MusicHelper {
         
         guard
             let accessURL = Bundle.main.url(forResource: "click", withExtension: "wav"),
-            let swapURL = Bundle.main.url(forResource: "swap", withExtension: "wav"),
-            let insertURL = Bundle.main.url(forResource: "swap", withExtension: "wav"),
-            let mergeURL = Bundle.main.url(forResource: "merge", withExtension: "wav"),
-            let buttonURL = Bundle.main.url(forResource: "merge", withExtension: "wav")
+            let swapURL = Bundle.main.url(forResource: "insert", withExtension: "wav"),
+            let insertURL = Bundle.main.url(forResource: "insert", withExtension: "wav"),
+            let mergeURL = Bundle.main.url(forResource: "insert", withExtension: "wav"),
+            let buttonURL = Bundle.main.url(forResource: "swap", withExtension: "wav")
             else {
                 print("error fetching music file from Music Helper Class")
                 return
@@ -57,11 +57,11 @@ public class MusicHelper {
         case .access:
             accessSoundPlayer?.play()
         case .button:
-            accessSoundPlayer?.play()
+            buttonSoundPlayer?.play()
         case .insert:
-            accessSoundPlayer?.play()
+            insertSoundPlayer?.play()
         case .merge:
-            accessSoundPlayer?.play()
+            mergeSoundPlayer?.play()
         case .swap:
             swapSoundPlayer?.play()
         }
