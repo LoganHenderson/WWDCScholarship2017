@@ -151,9 +151,7 @@ public class SortingAlgorithmView: UIView {
             gestureRecognizer.setTranslation(CGPoint.zero, in: self)
             
         } else if gestureRecognizer.state == .ended {
-            
-            print("veloctiy : \(Int(gestureRecognizer.velocity(in: self).x)) \(Int(gestureRecognizer.velocity(in: self).y))")
-            
+
             let translation = gestureRecognizer.translation(in: self)
             let newXLocation = gestureRecognizer.view!.center.x + translation.x
             
