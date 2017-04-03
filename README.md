@@ -5,7 +5,7 @@
 **Sorting Made Easy** My submission is a Playground designed to teach computer science students about popular sorting algorithms. To accomplish this I've created an interactive scene that will take in a photo and then sort the people in the photo by height from shortest to tallest. I am able to compare each persons hight by detecting the facial feature bounds of each person and then comparing each persons facial bounds Y coordinate.
 
 ## Examples
-#### Bubble Sort, Insertion Sort, and Merge Sort
+#### Insertion Sort, and Merge Sort
 
 <div>
 <img style="float:left;" src='https://github.com/LoganHenderson/WWDCScholarship2017/blob/master/Demos/InsertionSortDemo.gif?raw=true' title='Main Feed' alt='Main Feed'/>
