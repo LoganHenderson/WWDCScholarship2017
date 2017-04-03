@@ -8,9 +8,9 @@
 #### Bubble Sort, Insertion Sort, and Merge Sort
 
 <div>
-<img style="float:left;" src='' title='Home' alt='Home'/>
-<img style="float:left;" src='' title='Main Feed' alt='Main Feed'/>
-<img style="float:left;" src='' title='Profile' alt='Profile'/>
+<img style="float:left;" src='https://github.com/LoganHenderson/WWDCScholarship2017/blob/master/Demos/BubbleSortDemo.gif?raw=true' title='Home' alt='Home'/>
+<img style="float:left;" src='https://github.com/LoganHenderson/WWDCScholarship2017/blob/master/Demos/InsertionSortDemo.gif?raw=true' title='Main Feed' alt='Main Feed'/>
+<img style="float:left;" src='https://github.com/LoganHenderson/WWDCScholarship2017/blob/master/Demos/MergeSortDemo.gif?raw=true' title='Profile' alt='Profile'/>
 </div>
 
 
